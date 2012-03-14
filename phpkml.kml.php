@@ -41,6 +41,10 @@ for ($i = 0; $i < 60; $i++) {
     </PolyStyle>
   </Style>
 <?php
+echo "
+  <Folder>
+    <name>Grid</name>
+";
 for ($i = 0; $i < count($bigSquares); $i++) {
 	$bigSquare = $bigSquares[$i];
 	?>
@@ -67,13 +71,19 @@ for ($i = 0; $i < count($bigSquares); $i++) {
 	</Placemark>
 	<?php
 }
-
+echo "
+  </Folder>
+  <Folder>
+    <name>Contacts</name>
+";
 foreach (getContacts() as $callsign => $locator) {
 	?><Placemark>
 		<name><?php echo ($callsign); ?></name>
-		<Point><coordinates><?php echo (minLongFromMaidenhead($locator) . "," . minLatFromMaidenhead($locator)); ?></coordinates></Point>
+		<Point><coordinates><?php echo (minLongFromMaidenhead(strtolower($locator)) . "," . minLatFromMaidenhead(strtolower($locator))); ?></coordinates></Point>
 	</Placemark><?php
 }
+echo "
+  </Folder>";
 ?>
 </Document> 
 </kml>
