@@ -1,6 +1,6 @@
 <?php
 require_once("geographics.inc.php");
-require_once("logFunctions.php.inc"); // Hooray for consistency
+require_once("logFunctions.inc.php"); // Hooray for consistency
 
 //header ("Content-Type: application/vnd.google-earth.kml+xml");
 header("Content-Type: text/plain");
@@ -22,7 +22,7 @@ for ($i = 0; $i < 60; $i++) {
 }
 
 ?>
-<?xml version="1.0" encoding="UTF-8"?>
+<? echo "<?"; ?>xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <NetworkLinkControl>
 	<expires><?php echo (date("c", strtotime("+15 seconds"))); ?></expires>
@@ -40,6 +40,28 @@ for ($i = 0; $i < 60; $i++) {
       <colorMode>normal</colorMode>
     </PolyStyle>
   </Style>
+  <Style id="m_ylw-pushpin">
+    <IconStyle>
+      <scale>1.1</scale>
+      <Icon>
+        <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+      </Icon>
+      <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+    </IconStyle>
+    <ListStyle>
+    </ListStyle>
+  </Style>
+  <Style id="m_grn-pushpin">
+    <IconStyle>
+     <scale>1.1</scale>
+     <Icon>
+       <href>http://maps.google.com/mapfiles/kml/pushpin/grn-pushpin.png</href>
+     </Icon>
+     <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+    </IconStyle>
+    <ListStyle>
+    </ListStyle>
+  </Style>
 <?php
 echo "
   <Folder>
@@ -48,7 +70,7 @@ echo "
 for ($i = 0; $i < count($bigSquares); $i++) {
 	$bigSquare = $bigSquares[$i];
 	?>
-	  <Placemark>
+	<Placemark>
 		  <name><?php echo($bigSquare); ?></name>
 		  <styleUrl>#<?php echo (getSquareColour($bigSquare)); ?></styleUrl>
 		  <Polygon>
@@ -69,16 +91,18 @@ for ($i = 0; $i < count($bigSquares); $i++) {
 			</outerBoundaryIs>
 		  </Polygon>
 	</Placemark>
-	<?php
+<?php
 }
 echo "
   </Folder>
   <Folder>
     <name>Contacts</name>
 ";
+$cCnt = 0; // Colour count
 foreach (getContacts() as $callsign => $locator) {
 	?><Placemark>
 		<name><?php echo ($callsign); ?></name>
+                <styleUrl>#m_<?php if($cCnt < 5) { echo "grn"; } else { echo "ylw"; } $cCnt ++?>-pushpin</styleUrl>
 		<Point><coordinates><?php echo (minLongFromMaidenhead(strtolower($locator)) . "," . minLatFromMaidenhead(strtolower($locator))); ?></coordinates></Point>
 	</Placemark><?php
 }
