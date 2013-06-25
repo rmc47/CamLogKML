@@ -1,5 +1,5 @@
 <?php
-mysql_connect('localhost', 'camlog', 'g3pyeflossie');
+mysql_connect('localhost', 'user', 'passwd');
 $dbName = "camlog_" . mysql_real_escape_string($_GET["db"]);
 
 function getSquareColour($square) {
