@@ -1,6 +1,6 @@
 <?php
-mysql_connect("192.168.43.137", "root", "g3pye");
-$dbName = "ukac0823";
+mysql_connect('localhost', 'user', 'passwd');
+$dbName = mysql_real_escape_string($_GET["db"]);
 
 function getSquareColour($square) {
 	global $dbName;
@@ -18,7 +18,7 @@ function getSquareColour($square) {
 function getContacts() {
 	global $dbName;
 	
-	$res = mysql_db_query($dbName, "SELECT callsign, locator FROM log") or die ("Error getting log entries");
+	$res = mysql_db_query($dbName, "SELECT callsign, locator FROM log ORDER BY id DESC") or die ("Error getting log entries"); // List backwards so we can count off first ten fordifferent colour pin
 	$i = 0;
 	$contacts = array();
 	while ($arr = mysql_fetch_array($res)) {
